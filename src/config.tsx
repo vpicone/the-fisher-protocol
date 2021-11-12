@@ -1,7 +1,7 @@
 import Head from 'next/head'
 
-const titleDefault = 'React Three Next Starter'
-const url = 'https://react-three-next.vercel.app/'
+const titleDefault = 'The Fisher Protocol'
+const url = 'https://www.thefisherprotocol.fyi'
 const description =
   'The easiest and fastest way to create a 3D website using React Three Fiber and NextJS'
 const author = 'Author'
@@ -36,30 +36,8 @@ const Header = ({ title = titleDefault }) => {
         <meta name='og:image' content={'/icons/share.png'} />
         <meta name='og:site_name' content={title} />
         <meta name='og:description' content={description} />
-
-        <link rel='apple-touch-icon' href='/icons/apple-touch-icon.png' />
-        <link
-          rel='apple-touch-icon'
-          sizes='16x16'
-          href='/icons/favicon-16x16.png'
-        />
-        <link
-          rel='apple-touch-icon'
-          sizes='32x32'
-          href='/icons/favicon-32x32.png'
-        />
-        <link
-          rel='apple-touch-icon'
-          sizes='180x180'
-          href='/icons/apple-touch-icon.png'
-        />
         <link rel='manifest' href='/manifest.json' />
-        <link
-          rel='mask-icon'
-          color='#000000'
-          href='/icons/safari-pinned-tab.svg'
-        />
-        <link rel='apple-touch-startup-image' href='/startup.png' />
+        <link rel='icon' href='https://fav.farm/🔪' />
 
         {/* Meta Tags for HTML pages on Mobile */}
         {/* <meta name="format-detection" content="telephone=yes"/>
@@ -69,7 +47,6 @@ const Header = ({ title = titleDefault }) => {
           content='width=device-width, minimum-scale=1, initial-scale=1.0'
         />
         <meta name='theme-color' content='#000' />
-        <link rel='shortcut icon' href='/icons/favicon.ico' />
 
         {/* 
       Twitter Summary card
