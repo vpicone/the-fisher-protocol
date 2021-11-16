@@ -18,6 +18,7 @@ const LControl = () => {
     if (controls) {
       set({ controls: controls.current })
       dom.current.style['touch-action'] = 'none'
+      dom.current.style['background'] = 'none'
       controls.current.target = new THREE.Vector3(-4, 2.25, 0)
     }
   }, [dom, controls, set])
