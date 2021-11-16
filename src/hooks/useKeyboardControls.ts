@@ -3,8 +3,6 @@ import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import useStore from '@/helpers/store'
 
-const playerSize = new THREE.Vector3(0.5, 1.6, 0.5)
-
 const useKeyboardControls = ({ allowJumping = true }) => {
   const three = useThree()
   const locked = useStore((state) => state.locked)
@@ -13,6 +11,9 @@ const useKeyboardControls = ({ allowJumping = true }) => {
   const moveBackward = useRef(false)
   const moveRight = useRef(false)
   const canJump = useRef(false)
+  const { current: playerSize } = useRef(
+    new THREE.Vector3(0.5, three.camera.position.y, 0.5)
+  )
 
   const velocity = useRef(new THREE.Vector3())
   const direction = useRef(new THREE.Vector3())

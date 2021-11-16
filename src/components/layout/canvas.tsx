@@ -5,7 +5,7 @@ import useStore from '@/helpers/store'
 import { useEffect, useRef } from 'react'
 import useKeyboardControls from '@/hooks/useKeyboardControls'
 
-const CHAIR_POSITION = new THREE.Vector3(3.28, 1.6, -0.2)
+const CHAIR_POSITION = new THREE.Vector3(3.5, 2.25, -0.2)
 
 const LControl = () => {
   const set = useThree((state) => state.set)
@@ -18,7 +18,7 @@ const LControl = () => {
     if (controls) {
       set({ controls: controls.current })
       dom.current.style['touch-action'] = 'none'
-      controls.current.target = new THREE.Vector3(-4, 1, 0)
+      controls.current.target = new THREE.Vector3(-4, 2.5, 0)
     }
   }, [dom, controls, set])
 

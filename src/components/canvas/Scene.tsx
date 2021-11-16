@@ -372,12 +372,12 @@ export default function Model({ ...props }: JSX.IntrinsicElements['group']) {
         geometry={nodes.sofa001.geometry}
         material={nodes.sofa001.material}
       />
-      <mesh
+      {/* <mesh
         userData={{ canCollide: true }}
         matrixAutoUpdate={false}
         geometry={nodes.squareChair001.geometry}
         material={nodes.squareChair001.material}
-      />
+      /> */}
       <mesh
         userData={{ canCollide: true }}
         matrixAutoUpdate={false}
