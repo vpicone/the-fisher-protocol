@@ -4,8 +4,9 @@ import * as THREE from 'three'
 import useStore from '@/helpers/store'
 
 const useKeyboardControls = ({ allowJumping = true }) => {
+  const three = useThree()
   const locked = useStore((state) => state.locked)
-  const objects = useStore((state) => state.objects)
+  // const objects = useStore((state) => state.objects)
   const moveForward = useRef(false)
   const moveLeft = useRef(false)
   const moveBackward = useRef(false)
@@ -15,30 +16,44 @@ const useKeyboardControls = ({ allowJumping = true }) => {
   const velocity = useRef(new THREE.Vector3())
   const direction = useRef(new THREE.Vector3())
   const playerBox = useRef(new THREE.Box3())
-  const playerSize = new THREE.Vector3(0.25, 1.6, 0.25)
+  const playerSize = new THREE.Vector3(0.5, 1.6, 0.5)
 
-  objects.forEach((obj) => {
-    // obj.material.wireframe = true
-  })
+  // const [group] = three.scene.children
+
+  // if (group) {
+  //   group.traverse((obj) => {
+  //     const box = new THREE.BoxHelper(obj, 'cyan')
+  //     three.scene.add(box)
+  //   })
+  // }
 
   useFrame((state, delta) => {
+    const [group] = three.scene.children
     if (locked) {
       const { x, z } = state.camera.position
       playerBox.current.setFromCenterAndSize(
         new THREE.Vector3(x, 0, z),
         playerSize
       )
-      console.log(playerBox.current)
 
-      const colliding = objects.filter((obj) =>
-        playerBox.current.intersectsBox(obj.geometry.boundingBox)
-      )
+      group.traverse((obj) => {
+        if (
+          obj.isMesh &&
+          !obj.userData.excludeFromCollision &&
+          playerBox.current.intersectsBox(obj.geometry.boundingBox)
+        ) {
+          console.log(obj)
+        }
+      })
+      // const colliding = objects.filter((obj) =>
+      //   playerBox.current.intersectsBox(obj.geometry.boundingBox)
+      // )
 
-      if (colliding.length !== 0) {
-        console.log(
-          colliding.map((mesh) => ({ mesh, name: mesh.material.name }))
-        )
-      }
+      // if (colliding.length !== 0) {
+      //   console.log(
+      //     colliding.map((mesh) => ({ mesh, name: mesh.material.name }))
+      //   )
+      // }
 
       velocity.current.x -= velocity.current.x * 10.0 * delta
       velocity.current.z -= velocity.current.z * 10.0 * delta

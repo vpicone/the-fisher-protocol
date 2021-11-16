@@ -1,8 +1,0 @@
-Model Information:
-* title:	Oval Office |Baked| VR Ready
-* source:	https://sketchfab.com/3d-models/oval-office-baked-vr-ready-5ab6966fcf5c42738dc708ab161ef389
-* author:	Marco Virtual (https://sketchfab.com/marco_virtual)
-
-Model License:
-* license type:	SKETCHFAB Editorial (https://sketchfab.com/licenses)
-* requirements:	Use only in connection with events that are newsworthy or of public interest
