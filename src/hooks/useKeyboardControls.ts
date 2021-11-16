@@ -1,8 +1,11 @@
 import { useEffect, useState, useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
+import useStore from '@/helpers/store'
 
 const useKeyboardControls = ({ allowJumping = true }) => {
+  const locked = useStore((state) => state.locked)
+  const objects = useStore((state) => state.objects)
   const moveForward = useRef(false)
   const moveLeft = useRef(false)
   const moveBackward = useRef(false)
@@ -11,25 +14,50 @@ const useKeyboardControls = ({ allowJumping = true }) => {
 
   const velocity = useRef(new THREE.Vector3())
   const direction = useRef(new THREE.Vector3())
+  const playerBox = useRef(new THREE.Box3())
+  const playerSize = new THREE.Vector3(0.25, 1.6, 0.25)
 
-  useFrame(({ controls }, delta) => {
-    velocity.current.x -= velocity.current.x * 10.0 * delta
-    velocity.current.z -= velocity.current.z * 10.0 * delta
-    velocity.current.y -= 9.8 * 100.0 * delta // 100.0 = mass
+  objects.forEach((obj) => {
+    // obj.material.wireframe = true
+  })
 
-    direction.current.z =
-      Number(moveForward.current) - Number(moveBackward.current)
-    direction.current.x = Number(moveRight.current) - Number(moveLeft.current)
-    direction.current.normalize()
+  useFrame((state, delta) => {
+    if (locked) {
+      const { x, z } = state.camera.position
+      playerBox.current.setFromCenterAndSize(
+        new THREE.Vector3(x, 0, z),
+        playerSize
+      )
+      console.log(playerBox.current)
 
-    if (moveForward.current || moveBackward.current)
-      velocity.current.z -= direction.current.z * 15.0 * delta
-    if (moveLeft.current || moveRight.current)
-      velocity.current.x -= direction.current.x * 15.0 * delta
+      const colliding = objects.filter((obj) =>
+        playerBox.current.intersectsBox(obj.geometry.boundingBox)
+      )
 
-    if (controls) {
-      controls.moveRight(-velocity.current.x * delta)
-      controls.moveForward(-velocity.current.z * delta)
+      if (colliding.length !== 0) {
+        console.log(
+          colliding.map((mesh) => ({ mesh, name: mesh.material.name }))
+        )
+      }
+
+      velocity.current.x -= velocity.current.x * 10.0 * delta
+      velocity.current.z -= velocity.current.z * 10.0 * delta
+      velocity.current.y -= 9.8 * 100.0 * delta // 100.0 = mass
+
+      direction.current.z =
+        Number(moveForward.current) - Number(moveBackward.current)
+      direction.current.x = Number(moveRight.current) - Number(moveLeft.current)
+      direction.current.normalize()
+
+      if (moveForward.current || moveBackward.current)
+        velocity.current.z -= direction.current.z * 15.0 * delta
+      if (moveLeft.current || moveRight.current)
+        velocity.current.x -= direction.current.x * 15.0 * delta
+
+      if (state.controls) {
+        state.controls.moveRight(-velocity.current.x * delta)
+        state.controls.moveForward(-velocity.current.z * delta)
+      }
     }
   })
 
@@ -68,7 +96,6 @@ const useKeyboardControls = ({ allowJumping = true }) => {
   }
 
   const onKeyUp = function (event) {
-    console.log(event.code)
     switch (event.code) {
       case 'ArrowUp':
       case 'KeyW':

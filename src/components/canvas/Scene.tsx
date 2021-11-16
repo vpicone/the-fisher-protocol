@@ -5,19 +5,42 @@ license: SKETCHFAB Editorial (https://sketchfab.com/licenses)
 source: https://sketchfab.com/3d-models/oval-office-baked-vr-ready-5ab6966fcf5c42738dc708ab161ef389
 title: Oval Office |Baked| VR Ready
 */
-
-import React, { useRef } from 'react'
+import * as THREE from 'three'
+import React, { useRef, useEffect } from 'react'
+import { useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
+import useStore from '@/helpers/store'
 
 export default function Scene(props) {
+  const three = useThree()
+  const gltf = useGLTF('/scene.glb') as any
   const group = useRef()
+  console.log(gltf)
+
+  useEffect(() => {
+    const objects = Object.values(gltf.nodes as any[]).filter(
+      (node) =>
+        node.constructor.name === 'Mesh' && node.userData.name !== 'Object_2'
+    )
+
+    objects.forEach((obj) => {
+      const box = new THREE.BoxHelper(obj, 'cyan')
+      three.scene.add(box)
+    })
+
+    console.log(objects)
+
+    useStore.setState({
+      objects,
+    })
+  }, [gltf])
 
   // @ts-ignore
-  const { nodes, materials } = useGLTF('/scene.glb')
+  const { nodes, materials } = gltf
 
   return (
     <group ref={group} {...props} dispose={null}>
-      <group rotation={[-Math.PI / 2, 0, 0]} scale={[0.77, 0.77, 0.77]}>
+      <group rotation={[-Math.PI / 2, 0, 0]} scale={[1, 1, 1]}>
         <mesh
           castShadow
           receiveShadow
