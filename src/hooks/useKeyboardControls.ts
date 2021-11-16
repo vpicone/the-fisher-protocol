@@ -3,6 +3,8 @@ import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import useStore from '@/helpers/store'
 
+const playerSize = new THREE.Vector3(0.5, 1.6, 0.5)
+
 const useKeyboardControls = ({ allowJumping = true }) => {
   const three = useThree()
   const locked = useStore((state) => state.locked)
@@ -15,59 +17,61 @@ const useKeyboardControls = ({ allowJumping = true }) => {
 
   const velocity = useRef(new THREE.Vector3())
   const direction = useRef(new THREE.Vector3())
-  const playerBox = useRef(new THREE.Box3())
-  const playerSize = new THREE.Vector3(0.5, 1.6, 0.5)
 
-  // const [group] = three.scene.children
+  const playerBox = new THREE.Box3().setFromCenterAndSize(
+    three.camera.position,
+    playerSize
+  )
 
-  // if (group) {
-  //   group.traverse((obj) => {
-  //     const box = new THREE.BoxHelper(obj, 'cyan')
-  //     three.scene.add(box)
-  //   })
-  // }
+  const collisions = three.scene.children.filter(
+    (obj) => obj.userData.canCollide
+  )
+
+  // const playerPosition =
+  three.scene.traverse((obj) => {
+    if (obj.userData.canCollide) {
+      three.scene.add(new THREE.BoxHelper(obj, 'red'))
+    }
+  })
+  // console.log(three.camera.position)
+
+  const playerBoxCenter = new THREE.Vector3()
+  const collisionCenter = new THREE.Vector3()
 
   useFrame((state, delta) => {
-    const [group] = three.scene.children
+    // const [group] = three.scene.children
     if (locked) {
-      const { x, z } = state.camera.position
-      playerBox.current.setFromCenterAndSize(
-        new THREE.Vector3(x, 0, z),
-        playerSize
-      )
-
-      group.traverse((obj) => {
-        if (
-          obj.isMesh &&
-          !obj.userData.excludeFromCollision &&
-          playerBox.current.intersectsBox(obj.geometry.boundingBox)
-        ) {
-          console.log(obj)
-        }
+      // const { x, z } = state.camera.position
+      playerBox.setFromCenterAndSize(state.camera.position, playerSize)
+      const isColliding = collisions.filter((obj) => {
+        return playerBox.intersectsBox(obj.geometry.boundingBox)
       })
-      // const colliding = objects.filter((obj) =>
-      //   playerBox.current.intersectsBox(obj.geometry.boundingBox)
-      // )
 
-      // if (colliding.length !== 0) {
-      //   console.log(
-      //     colliding.map((mesh) => ({ mesh, name: mesh.material.name }))
-      //   )
-      // }
+      console.log(state.camera.position)
 
-      velocity.current.x -= velocity.current.x * 10.0 * delta
-      velocity.current.z -= velocity.current.z * 10.0 * delta
-      velocity.current.y -= 9.8 * 100.0 * delta // 100.0 = mass
+      if (isColliding.length) {
+        // stop all movement
+        velocity.current.x = velocity.current.x * -0.5
+        velocity.current.z = velocity.current.z * -0.5
 
-      direction.current.z =
-        Number(moveForward.current) - Number(moveBackward.current)
-      direction.current.x = Number(moveRight.current) - Number(moveLeft.current)
-      direction.current.normalize()
+        state.controls.moveRight(-1 * direction.current.x * delta)
+        state.controls.moveForward(-1 * direction.current.z * delta)
+      } else {
+        velocity.current.x -= velocity.current.x * 10.0 * delta
+        velocity.current.z -= velocity.current.z * 10.0 * delta
+        velocity.current.y -= 9.8 * 100.0 * delta // 100.0 = mass
 
-      if (moveForward.current || moveBackward.current)
-        velocity.current.z -= direction.current.z * 15.0 * delta
-      if (moveLeft.current || moveRight.current)
-        velocity.current.x -= direction.current.x * 15.0 * delta
+        direction.current.z =
+          Number(moveForward.current) - Number(moveBackward.current)
+        direction.current.x =
+          Number(moveRight.current) - Number(moveLeft.current)
+        direction.current.normalize()
+
+        if (moveForward.current || moveBackward.current)
+          velocity.current.z -= direction.current.z * 15.0 * delta
+        if (moveLeft.current || moveRight.current)
+          velocity.current.x -= direction.current.x * 15.0 * delta
+      }
 
       if (state.controls) {
         state.controls.moveRight(-velocity.current.x * delta)
