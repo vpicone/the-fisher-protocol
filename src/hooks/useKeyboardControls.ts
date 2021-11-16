@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import useStore from '@/helpers/store'
@@ -8,7 +8,6 @@ const playerSize = new THREE.Vector3(0.5, 1.6, 0.5)
 const useKeyboardControls = ({ allowJumping = true }) => {
   const three = useThree()
   const locked = useStore((state) => state.locked)
-  // const objects = useStore((state) => state.objects)
   const moveForward = useRef(false)
   const moveLeft = useRef(false)
   const moveBackward = useRef(false)
@@ -27,16 +26,12 @@ const useKeyboardControls = ({ allowJumping = true }) => {
     (obj) => obj.userData.canCollide
   )
 
-  // const playerPosition =
-  three.scene.traverse((obj) => {
-    if (obj.userData.canCollide) {
-      three.scene.add(new THREE.BoxHelper(obj, 'red'))
-    }
-  })
-  // console.log(three.camera.position)
-
-  const playerBoxCenter = new THREE.Vector3()
-  const collisionCenter = new THREE.Vector3()
+  // Box helpers
+  // three.scene.traverse((obj) => {
+  //   if (obj.userData.canCollide) {
+  //     three.scene.add(new THREE.BoxHelper(obj, 'red'))
+  //   }
+  // })
 
   useFrame((state, delta) => {
     // const [group] = three.scene.children
@@ -46,8 +41,6 @@ const useKeyboardControls = ({ allowJumping = true }) => {
       const isColliding = collisions.filter((obj) => {
         return playerBox.intersectsBox(obj.geometry.boundingBox)
       })
-
-      console.log(state.camera.position)
 
       if (isColliding.length) {
         // stop all movement
