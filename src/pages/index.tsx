@@ -10,6 +10,10 @@ const Scene = dynamic(() => import('@/components/canvas/Scene'), {
   ssr: false,
 })
 
+const Volunteer = dynamic(() => import('@/components/canvas/Volunteer'), {
+  ssr: false,
+})
+
 // dom components goes here
 const DOM = () => {
   return (
@@ -23,6 +27,7 @@ const R3F = ({ r3f = true }) => {
   return (
     <Suspense fallback={null}>
       <Scene />
+      <Volunteer />
     </Suspense>
   )
 }

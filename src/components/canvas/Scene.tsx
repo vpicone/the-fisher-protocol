@@ -7,7 +7,7 @@ import React from 'react'
 import { useGLTF } from '@react-three/drei'
 import { GLTF } from 'three-stdlib'
 import { useLoader } from '@react-three/fiber'
-import environmentImage from './environment.jpg'
+import environmentImage from './textures/environment.jpg'
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -110,7 +110,6 @@ export default function Model({ ...props }: JSX.IntrinsicElements['group']) {
     environmentImage.src,
   ])
 
-  console.log(environmentTexture)
   environmentTexture.flipY = false
   const { nodes, materials } = useGLTF('/scene-transformed.glb') as GLTFResult
 
