@@ -218,6 +218,7 @@ export default function Model({ ...props }: JSX.IntrinsicElements['group']) {
         material={nodes.squareChair.material}
       />
       <mesh
+        receiveShadow={true}
         matrixAutoUpdate={false}
         geometry={nodes.office.geometry}
         material={materials.office}
