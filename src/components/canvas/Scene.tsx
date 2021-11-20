@@ -6,8 +6,9 @@ import * as THREE from 'three'
 import React from 'react'
 import { useGLTF } from '@react-three/drei'
 import { GLTF } from 'three-stdlib'
-import { useLoader } from '@react-three/fiber'
+import { useLoader, useThree } from '@react-three/fiber'
 import environmentImage from './textures/environment.jpg'
+import officeImage from './textures/office.jpg'
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -106,17 +107,23 @@ type GLTFResult = GLTF & {
 }
 
 export default function Model({ ...props }: JSX.IntrinsicElements['group']) {
-  const [environmentTexture] = useLoader(THREE.TextureLoader, [
+  const three = useThree()
+  const [environmentTexture, officeTexture] = useLoader(THREE.TextureLoader, [
     environmentImage.src,
+    officeImage.src,
   ])
 
   environmentTexture.flipY = false
+  officeTexture.flipY = false
+
   const { nodes, materials } = useGLTF('/scene-transformed.glb') as GLTFResult
 
   materials.enviroment.side = THREE.BackSide
 
   return (
     <>
+      <hemisphereLight color={0xfdf4dc} intensity={0.3} position={[0, 5, 0]} />
+      <directionalLight intensity={1} position={[5, 5, 0]} />
       <mesh
         userData={{ canCollide: true }}
         matrixAutoUpdate={false}
@@ -217,12 +224,9 @@ export default function Model({ ...props }: JSX.IntrinsicElements['group']) {
         geometry={nodes.squareChair.geometry}
         material={nodes.squareChair.material}
       />
-      <mesh
-        receiveShadow={true}
-        matrixAutoUpdate={false}
-        geometry={nodes.office.geometry}
-        material={materials.office}
-      />
+      <mesh matrixAutoUpdate={true} geometry={nodes.office.geometry}>
+        <meshBasicMaterial map={officeTexture} />
+      </mesh>
       <mesh
         matrixAutoUpdate={false}
         geometry={nodes.dresserFrame.geometry}
@@ -379,6 +383,7 @@ export default function Model({ ...props }: JSX.IntrinsicElements['group']) {
       />
       {/* <mesh
         userData={{ canCollide: true }}
+
         matrixAutoUpdate={false}
         geometry={nodes.squareChair001.geometry}
         material={nodes.squareChair001.material}

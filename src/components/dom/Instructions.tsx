@@ -4,14 +4,7 @@ export default function Instructions() {
   const locked = useStore((state) => state.locked)
 
   return (
-    <div
-      className='absolute px-8 py-8 shadow-xl select-none md:text-base top-8 left-1/2 text-gray-50 transform -translate-x-1/2'
-      style={{
-        backgroundColor: 'rgb(27, 30, 40)',
-        maxWidth: 'calc(100% - 28px)',
-        display: locked ? 'none' : 'block',
-      }}
-    >
+    <div className='root'>
       <blockquote className='max-w-xl text-xl italic'>
         <p className='mb-4'>
           My suggestion was quite simple: Put that needed code number in a
@@ -37,6 +30,27 @@ export default function Instructions() {
       </blockquote>
       <p className='my-8'>W, A, S, D = Move, MOUSE = Look, ESC = Menu</p>
       <button id='start-button'>Begin</button>
+      <style jsx>
+        {`
+          .root {
+            position: absolute;
+            z-index: 1;
+            padding: 8px;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: ${locked ? 'none' : 'block'};
+            width: 100%;
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.2);
+            background-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 8px;
+            color: white;
+            text-shadow: 2px 2px 2px black;
+          }
+        `}
+      </style>
     </div>
   )
 }

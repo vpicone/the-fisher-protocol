@@ -1,9 +1,22 @@
-import { Canvas, useThree } from '@react-three/fiber'
+import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { PointerLockControls, Preload } from '@react-three/drei'
+import {
+  PointerLockControls,
+  Preload,
+  AdaptiveDpr,
+  Stats,
+} from '@react-three/drei'
 import useStore from '@/helpers/store'
 import { useEffect, useRef } from 'react'
 import useKeyboardControls from '@/hooks/useKeyboardControls'
+import {
+  EffectComposer,
+  DepthOfField,
+  Noise,
+  Vignette,
+  Bloom,
+} from '@react-three/postprocessing'
+import { KernelSize, BlendFunction } from 'postprocessing'
 
 const CHAIR_POSITION = new THREE.Vector3(3.5, 2.25, -0.2)
 
@@ -38,6 +51,21 @@ const LControl = () => {
     />
   )
 }
+
+function Effects() {
+  return (
+    <EffectComposer>
+      <Vignette offset={0.9} darkness={2} eskil={true} />
+      <Bloom
+        kernelSize={KernelSize.LARGE}
+        luminanceThreshold={0.5}
+        luminanceSmoothing={0.3}
+      />
+      <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={1} />
+    </EffectComposer>
+  )
+}
+
 const LCanvas = ({ children }) => {
   const dom = useStore((state) => state.dom)
   const dpr =
@@ -48,6 +76,9 @@ const LCanvas = ({ children }) => {
       mode='concurrent'
       dpr={dpr}
       shadows
+      gl={{
+        powerPreference: 'high-performance',
+      }}
       camera={{
         position: CHAIR_POSITION,
       }}
@@ -59,6 +90,9 @@ const LCanvas = ({ children }) => {
         state.events.connect(dom.current)
       }}
     >
+      <AdaptiveDpr />
+      <Stats />
+      <Effects />
       <LControl />
       <Preload all />
       {children}
