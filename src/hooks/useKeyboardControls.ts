@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import useStore from '@/helpers/store'
+import { Object3D } from 'three'
 
 const useKeyboardControls = ({ allowJumping = true }) => {
   const three = useThree()
@@ -39,7 +40,7 @@ const useKeyboardControls = ({ allowJumping = true }) => {
     if (locked) {
       // const { x, z } = state.camera.position
       playerBox.setFromCenterAndSize(state.camera.position, playerSize)
-      const isColliding = collisions.filter((obj) => {
+      const isColliding = collisions.filter((obj: THREE.Mesh) => {
         return playerBox.intersectsBox(obj.geometry.boundingBox)
       })
 
@@ -47,8 +48,9 @@ const useKeyboardControls = ({ allowJumping = true }) => {
         // stop all movement
         velocity.current.x = velocity.current.x * -0.5
         velocity.current.z = velocity.current.z * -0.5
-
+        // @ts-ignore
         state.controls.moveRight(-1 * direction.current.x * delta)
+        // @ts-ignore
         state.controls.moveForward(-1 * direction.current.z * delta)
       } else {
         velocity.current.x -= velocity.current.x * 10.0 * delta
@@ -68,7 +70,9 @@ const useKeyboardControls = ({ allowJumping = true }) => {
       }
 
       if (state.controls) {
+        // @ts-ignore
         state.controls.moveRight(-velocity.current.x * delta)
+        // @ts-ignore
         state.controls.moveForward(-velocity.current.z * delta)
       }
     }
