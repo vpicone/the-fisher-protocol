@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
 import Instructions from '@/components/dom/Instructions'
+import StoryBoards from '@/components/canvas/StoryBoards'
 
 // Dynamic import is used to prevent a payload when the website start that will include threejs r3f etc..
 // WARNING ! errors might get obfuscated by using dynamic import.
@@ -26,6 +27,7 @@ const DOM = () => {
 const R3F = ({ r3f = true }) => {
   return (
     <Suspense fallback={null}>
+      {/* <StoryBoards /> */}
       <Scene />
       <Volunteer />
     </Suspense>

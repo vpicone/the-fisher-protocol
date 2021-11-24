@@ -18,7 +18,7 @@ import {
 } from '@react-three/postprocessing'
 import { KernelSize, BlendFunction } from 'postprocessing'
 
-const CHAIR_POSITION = new THREE.Vector3(3.5, 2.25, -0.2)
+const CHAIR_POSITION = new THREE.Vector3(4.25, 2.25, -2.5)
 
 const LControl = () => {
   const set = useThree((state) => state.set)
@@ -32,7 +32,6 @@ const LControl = () => {
       set({ controls: controls.current })
       dom.current.style['touch-action'] = 'none'
       dom.current.style['background'] = 'none'
-      controls.current.target = new THREE.Vector3(-4, 2.25, 0)
     }
   }, [dom, controls, set])
 
@@ -88,6 +87,7 @@ const LCanvas = ({ children }) => {
       }}
       onCreated={(state) => {
         state.events.connect(dom.current)
+        state.camera.lookAt(0, 2, 0)
       }}
     >
       <AdaptiveDpr />

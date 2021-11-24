@@ -1,53 +1,53 @@
 import useStore from '@/helpers/store'
+import { useProgress } from '@react-three/drei'
 
 export default function Instructions() {
   const locked = useStore((state) => state.locked)
+  const { progress } = useProgress()
 
   return (
     <div className='root'>
-      <blockquote className='max-w-xl text-xl italic'>
-        <p className='mb-4'>
-          My suggestion was quite simple: Put that needed code number in a
-          little capsule, and then implant that capsule right next to the heart
-          of a volunteer. The volunteer would carry with him a big, heavy
-          butcher knife as he accompanied the President.
-        </p>
-        <p className='mb-4'>
-          If ever the President wanted to fire nuclear weapons, the only way he
-          could do so would be for him first, with his own hands, to kill one
-          human being. He has to look at someone and realize what death is—what
-          an innocent death is. Blood on the White House carpet. It‘s reality
-          brought home.
-        </p>
-        <p className='mb-4'>
-          When I suggested this to friends in the Pentagon they said, “My God,
-          that‘s terrible. Having to kill someone would distort the President‘s
-          judgment. He might never push the button.”
-        </p>
-        <cite className='ml-4'>
-          — Roger Fisher, Bulletin of the Atomic Scientists, March 1981
-        </cite>
-      </blockquote>
-      <p className='my-8'>W, A, S, D = Move, MOUSE = Look, ESC = Menu</p>
-      <button id='start-button'>Begin</button>
+      <p className='my-8'>Use W, A, S, D keys to move,</p>
+      <p>mouse to look around,</p>
+      <p>and escape key to access this menu</p>
+      <button hidden={progress !== 100} id='start-button'>
+        Begin
+      </button>
+
+      {progress !== 100 && (
+        <>
+          <progress max='100' value={progress}>
+            {progress} % loaded
+          </progress>
+          <p>Loading...</p>
+        </>
+      )}
       <style jsx>
         {`
           .root {
             position: absolute;
             z-index: 1;
-            padding: 8px;
-            top: 8px;
+            padding: 16px;
+            top: 30%;
             left: 50%;
             transform: translateX(-50%);
-            display: ${locked ? 'none' : 'block'};
+            display: ${locked ? 'none' : 'flex'};
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             width: 100%;
-            max-width: 600px;
+            max-width: 300px;
             background: rgba(0, 0, 0, 0.2);
             background-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border-radius: 8px;
             color: white;
-            text-shadow: 2px 2px 2px black;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+          }
+
+          p {
+            margin-top: 0;
+            margin-bottom: 8px;
           }
         `}
       </style>
