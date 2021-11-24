@@ -107,7 +107,6 @@ type GLTFResult = GLTF & {
 }
 
 export default function Model({ ...props }: JSX.IntrinsicElements['group']) {
-  const three = useThree()
   const [environmentTexture, officeTexture] = useLoader(THREE.TextureLoader, [
     environmentImage.src,
     officeImage.src,
@@ -153,6 +152,7 @@ export default function Model({ ...props }: JSX.IntrinsicElements['group']) {
         material={nodes.doorMolding.material}
       />
       <mesh
+        userData={{ canCollide: true }}
         matrixAutoUpdate={false}
         geometry={nodes.resoluteChair.geometry}
         material={materials.principal_chair}
@@ -180,7 +180,7 @@ export default function Model({ ...props }: JSX.IntrinsicElements['group']) {
         material={nodes.hangingFrame.material}
       />
       <mesh
-        // userData={{ canCollide: true }}
+        userData={{ canCollide: true }}
         matrixAutoUpdate={false}
         geometry={nodes.resoluteDesk.geometry}
         material={materials.resolute_desk}

@@ -54,11 +54,11 @@ const LControl = () => {
 function Effects() {
   return (
     <EffectComposer>
-      <Vignette offset={0.9} darkness={2} eskil={true} />
+      <Vignette offset={0.9} darkness={1.5} eskil={true} />
       <Bloom
-        kernelSize={KernelSize.LARGE}
+        kernelSize={KernelSize.SMALL}
         luminanceThreshold={0.5}
-        luminanceSmoothing={0.3}
+        luminanceSmoothing={0.2}
       />
       <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={1} />
     </EffectComposer>
