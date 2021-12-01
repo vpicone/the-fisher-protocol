@@ -224,7 +224,7 @@ export default function Model({ ...props }: JSX.IntrinsicElements['group']) {
         geometry={nodes.squareChair.geometry}
         material={nodes.squareChair.material}
       />
-      <mesh matrixAutoUpdate={true} geometry={nodes.office.geometry}>
+      <mesh matrixAutoUpdate={false} geometry={nodes.office.geometry}>
         <meshBasicMaterial map={officeTexture} />
       </mesh>
       <mesh

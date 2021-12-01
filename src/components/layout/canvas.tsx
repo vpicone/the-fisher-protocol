@@ -91,7 +91,7 @@ const LCanvas = ({ children }) => {
       }}
     >
       <AdaptiveDpr />
-      <Stats />
+      {/* <Stats /> */}
       <Effects />
       <LControl />
       <Preload all />
