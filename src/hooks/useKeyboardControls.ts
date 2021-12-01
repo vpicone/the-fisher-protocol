@@ -49,9 +49,9 @@ const useKeyboardControls = ({ allowJumping = true }) => {
         velocity.current.x = velocity.current.x * -0.5
         velocity.current.z = velocity.current.z * -0.5
         // @ts-ignore
-        state.controls.moveRight(-0.5 * direction.current.x)
+        state.controls.moveRight(-0.1 * direction.current.x)
         // @ts-ignore
-        state.controls.moveForward(-0.5 * direction.current.z)
+        state.controls.moveForward(-0.1 * direction.current.z)
       } else {
         velocity.current.x -= velocity.current.x * 10.0 * delta
         velocity.current.z -= velocity.current.z * 10.0 * delta
